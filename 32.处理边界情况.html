@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/pikaday/1.8.2/css/pikaday.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/pikaday/1.8.2/pikaday.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ name }}
+        <cmp-a ref="cmpA"
+            v-for="num in 2"
+            :key="num"
+        >
+            <cmp-b ref="cmpB">
+                <cmp-c></cmp-c>
+            </cmp-b>
+        </cmp-a>
+        <!-- <my-cmp></my-cmp> -->
+        <!-- <my-cmp1></my-cmp1> -->
+        <!-- <my-cmpA></my-cmpA> -->
+    </div>
+    <script>
+        Vue.component("my-cmpB", {
+            template: `
+                <div>
+                    <my-cmpA />
+                </div>
+            `
+        });
+        Vue.component("my-cmpA", {
+            template: `
+                <div>
+                    <my-cmpB />
+                </div>
+            `
+        });
+        Vue.component("my-cmp1", {
+            template: `
+                <div>
+                    <my-cmp1 />
+                </div>
+            `
+        })
+        Vue.component("my-cmp", {
+            template: '<div><input type="text" ref="inputA" /><input type="text" ref="inputB" /><button @click="$destroy()">销毁</button></div>',
+            // 如下方法使得picker被暴露成为杂物 清理代码独立于产生代码 导致我们难以处理
+            // mounted() {
+            //     this.picker = new Pikaday({
+            //         field: this.$refs.input,
+            //         format: 'YYYY-MM-DD',
+            //     })
+            // },
+            // beforeDestroy() {
+            //     this.picker.destroy();
+            // }
+            methods: {
+                datePicker(refName) {
+                    const picker = new Pikaday({
+                        field: this.$refs[refName],
+                        format: 'YYYY-MM-DD'
+                    });
+                    this.$once("hook:beforeDestroy", () => {
+                        picker.destroy();
+                    })
+                }
+            },
+            mounted() {
+                this.datePicker("inputA");
+                this.datePicker("inputB")
+            }
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                name: "根实例"
+            },
+            provide() {
+                return {
+                    names: "我是根实例的provide方法提供的数据"
+                }
+            },
+            mounted() {
+                console.log(this.$refs.cmpA, this.$refs.cmpB, this.$refs.input)
+            },
+            components: {
+                "cmp-a": {
+                    data() {
+                        return {
+                            name: "cmp-a"
+                        }
+                    },
+                    provide() {
+                        return {
+                            names: "我是组件cmp-a的provide方法提供的数据"
+                        }
+                    },
+                    inject: ["names"],
+                    template: `
+                        <div>
+                            <input type='text' ref="input" />
+                            <slot></slot>
+                        </div>
+                    `,
+                    mounted() {
+                        console.log(this.$refs.input, this.$refs.inputs);
+                        // console.log(this.names)
+                        // console.log(this.$root.name, this.$parent.name);
+                    }
+                },
+                "cmp-b": {
+                    data() {
+                        return {
+                            name: "cmp-b"
+                        }
+                    },
+                    inject: ["names"],
+                    template: `
+                        <div>
+                            <input type="text" ref="inputs" />
+                            <slot></slot>
+                        </div>
+                    `,
+                    mounted() {
+                        this.$root.name = "123"
+                        // console.log(this.names)
+                        // console.log(this.$root.name, this.$parent.name, this.$parent.$parent.name)
+                    }
+                },
+                "cmp-c": {
+                    template: `
+                        <div>
+                            <slot></slot>
+                        </div>
+                    `,
+                    mounted() {
+                        // console.log(this.$root.name, this.$parent.name, this.$parent.$parent.name, this.$parent.$parent.$parent.name)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
