@@ -14,8 +14,95 @@
             <!--  -->
             {{ name }}
         </base-div>
+        <base-btn>default</base-btn>
+
+
+        <my-cmp>
+            <template v-slot:header>
+                <p>我是头部</p>
+            </template>
+          
+                <p>我是主要内容</p>
+           
+            <template v-slot:footer>
+                <p>我是底部</p>
+            </template>
+            <p>我也是主要内容</p>
+        </my-cmp>
+
+        <my-cmp1>
+            <template v-slot:default="slotProps">
+                <span>{{ slotProps }}</span>
+            </template>
+            <template #stu="slotProps">
+                {{ slotProps }}
+            </template>
+            <!-- 会将前面进行覆盖 -->
+            <template v-slot="{name, age, position}">
+                <span>{{ name }}</span>
+                <span>{{ age }}</span>
+                <span>{{ position }}</span>
+            </template>
+            <template #footer="{de = {footer: '我是默认值'}}">
+                {{ de }}
+            </template>
+        </my-cmp1>
+
+        <my-cmp1 v-slot="user">
+            <span>{{ user }}</span>
+        </my-cmp1>
     </div>
     <script>
+        Vue.component("my-cmp1", {
+            data() {
+                return {
+                    user: {
+                        name: "chen",
+                        age: 19,
+                        position: {
+                            country: "China",
+                            province: "hubei"
+                        }
+                    },
+                    flag: 123,
+                    stu: {
+                        grade: 100,
+                        name: "456"
+                    }
+                } 
+            },
+            template: `
+                <div>
+                    <slot v-bind="user"></slot>
+                    <slot name="stu" v-bind="stu"></slot>
+                    <slot name="footer"></slot>
+                </div>
+            `
+        })
+        //我们血药通过插槽在当前的组件模板中进行填充
+        Vue.component("my-cmp", {
+            template: `
+            <div class="container">
+                <div class="header">
+                    <slot name="header"></slot>
+                </div>
+                <div class="main">
+                    <slot></slot>
+                </div>
+                <div class="footer">
+                    <slot name="footer"></slot>
+                </div>
+            </div>
+            `
+        })
+        Vue.component("base-btn", {
+            template: `
+                <button>
+                    <slot>Submit</slot>    
+                </button>
+            `
+        })
+
         Vue.component("base-div", {
             data() {
                 return {

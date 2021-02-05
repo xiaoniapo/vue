@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button @click="page = 'my-cmp'">cur</button>
+        <button @click="page = 'my-cmp1'">more</button>
+        <keep-alive>
+            <component :is="page"></component>
+        </keep-alive>
+    </div>
+    <script>
+        Vue.component("my-cmp", {
+            template: `
+                <div>cur</div>
+            `,
+            created() {//用于检测每次是否时重新创建
+                console.log("my-cmp被创建了");
+            },
+            activated() {
+                console.log("cur activated")
+            },
+            deactivated() {
+                console.log("cur deactivated")
+            }
+        });
+        Vue.component("my-cmp1", {
+            data() {
+                return {
+                    posts: [
+                        {title: "标题一", content: { template: "<div>内容一</div>" }, id: 0},
+                        {title: "标题二", content: { template: "<div>内容二</div>" }, id: 1},
+                        {title: "标题三", content: { template: "<div>内容三</div>" }, id: 2},
+                        {title: "标题四", content: { template: "<div>内容四</div>" }, id: 3},
+                    ],
+                    curPage: '',
+                }
+            },
+            created() {
+                this.curPage = this.posts[0].content;
+                console.log("my-cmp1被创建了")
+            },
+            template: `
+                <div>
+                    <button
+                        v-for="post in posts"
+                        :key="post.id"
+                        @click="curPage = post.content"
+                    >
+                        {{ post.title }}
+                    </button>
+                    <component :is="curPage"></component>
+                </div>
+            `,
+            activated() {
+                console.log("more activated")
+            },
+            deactivated() {
+                console.log("more deactivated")
+            }
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                page: "my-cmp1"
+            },
+            
+        })
+    </script>
+</body>
+</html>
