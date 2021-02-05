@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- <blog-list :blog-list="blogList" :style="{fontSize: postFontSize + 'em'}" @enlarge-text="enlargeText"></blog-list> -->
+        <!-- <base-input @focus.native="myFocus" @blur.native="myBlur"></base-input> -->
+        <!-- <base-input @focus="myFocus" @blur="myBlur"></base-input> -->
+
+        <!-- <base-input1 :value="content" @input="content = $event"></base-input1> -->
+        <!-- <base-input1 v-model="content"></base-input1> -->
+
+        <!-- <base-checkbox :checked="checked" @change="checked = !checked"></base-checkbox> -->
+        <!-- <base-checkbox v-model="checked"></base-checkbox> -->
+
+
+        <!-- <base-input2 :value="content" @update:value="content = $event"></base-input2> -->
+        <base-input2 :value.sync="content"></base-input2>
+
+    </div>
+    <script>
+        //组件触发事件 --》 父级事件执行 --》 控制数据改变
+        Vue.component("base-input2", {
+            props: ["value"],
+            template: `
+                <input type="text" :value="value" @update:value="$emit('update:value', $event.target.value)" />
+            `
+        })
+        Vue.component("blog-list", {
+            props: ["blogList"],
+            template: `
+                <div class="blog-list">
+                    <div class="blog" v-for="blog in blogList" :key="blog.id">
+                        <div class="ttile">{{ blog.title }}</div>
+                        <button @click="$listeners['enlarge-text']">加大字体</button>
+                        <div class="content">{{ blog.content }}</div>
+                        <br>
+                    </div>
+                </div>
+            `,
+            template: `
+                <div class="blog-list">
+                    <div class="blog" v-for="blog in blogList" :key="blog.id">
+                        <div class="ttile">{{ blog.title }}</div>
+                        <button @click="$emit('enlarge-text', 0.2)">加大字体</button>
+                        <div class="content">{{ blog.content }}</div>
+                        <br>
+                    </div>
+                </div>
+            `,
+            mounted() {
+                console.log(this.$listeners)
+            }
+        })
+        Vue.component("base-input", {
+            template: `
+                <label>
+                    信息
+                    <input type="text" v-on="$listeners"/>
+                </label>
+            `,
+            mounted() {
+                console.log(this.$listeners)
+            }
+        })
+        Vue.component("base-input1", {
+            props: ["value"],
+            template: `
+                <input type="text" :value="value" @input="$emit('input', $event.target.value)" />
+            `
+        })
+        Vue.component("base-checkbox", {
+            model: {
+                prop: "checked",
+                event: "change"
+            },
+            props: ["checked"],
+            template: `
+                <input type="checkbox" :checked="checked" @change="$emit('change')"/>
+            `
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                blogList: [
+                    {title: "标题1", content: "这是内容1", id: 1},
+                    {title: "标题2", content: "这是内容2", id: 2},
+                    {title: "标题3", content: "这是内容3", id: 3},
+                    {title: "标题4", content: "这是内容4", id: 4}
+
+                ],
+                postFontSize: 1,
+                content: "123456",
+                checked: true
+            },
+            methods: {
+                enlargeText (e) {
+                    console.log(e);
+                    this.postFontSize += 0.2;
+                },
+                myFocus() {
+                    console.log("我聚焦了");
+                },
+                myBlur() {
+                    console.log("我失焦了");
+                }
+            },
+        })
+    </script>
+</body>
+</html>

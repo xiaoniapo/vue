@@ -1,0 +1,49 @@
+#app {
+    padding-top: 90px;
+}
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+}
+.logo{
+    margin-left: 8px;
+}
+
+.search-input {
+    width: 152px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 13px;
+}
+.search-input svg {
+    margin-left: 10px;
+}
+.search-input span {
+    width: 129px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.avatar svg {
+    border-radius: 50%;
+}
+.load-app {
+    height: 28px;
+    line-height: 28px;
+    padding: 0 10px;
+    margin-right: 12px;
+    text-align: center;
+    color: #fff;
+    background-color: #fb7299;
+    border-radius: 15px;
+}

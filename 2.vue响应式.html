@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <!-- <div>
+        我是div
+    </div>
+    <script>
+        function use(dom,text) {
+            dom.innerText = text;
+            console.log("我的数据改动了");
+        }
+        const div = document.querySelector("div");
+        const text = div.innerText;
+        const bind = {
+
+        };
+        Object.defineProperty(bind, "div", {
+            get() {
+                return div.innerText;
+            },
+            set(val) {
+                if(val === div.innerText) {
+                    return;
+                }
+                use(div, val);
+            }
+        })
+    </script> -->
+    <div id="app">
+        <!-- {{ student.age }}
+        {{ student.name }} -->
+        {{ msg }}
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "风姿绰约、花枝招展",
+                student: {
+                    name: "chen" 
+                }
+            }
+        })
+        vm.msg = "唇红齿白";
+        console.log(vm.msg);
+        console.log(vm.$el.innerText);//此处说明了页面并未立即重新渲染
+
+
+        setTimeout(()=> {
+            console.log("我用于验证界面渲染是在异步进行执行的且先于setTimeout")
+        },0);
+        // const res = vm.$nextTick(function () {
+        //     console.log(this === vm)
+        //     console.log(vm.$el.innerText);
+        //     // console.log(res)
+        // })
+        // const promise = new Promise((resolve, reject) => {
+        //     resolve(res);
+        // })
+        // promise.then(data => {
+        //     console.log(data)
+        // })
+
+        // vm.$nextTick().then(data => {
+        //     console.log(data === vm)
+        // })
+        
+        // vm.$nextTick(() => {
+        //     console.log(vm.$el.innerText)
+        // })
+        // Vue.nextTick(() => {
+        //     console.log(vm.$el.innerText)
+        // })
+        Vue.nextTick().then(function () {
+            console.log(this)
+        })
+        // setTimeout(()=>{
+        //     console.log("我起测试作用")
+        // },0)
+        // for(let i = 0;i < 10000;i ++) {
+        //     vm.msg = i;
+        // }
+        // console.log(123)
+    </script>
+</body>
+</html>

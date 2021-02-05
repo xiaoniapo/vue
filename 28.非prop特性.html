@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <person-cmp :person-list="123" a="123" class="a" style="margin-left: 10px;"></person-cmp>
+        <base-input :name="123" :type="'radio'" a="123"></base-input>
+    </div>
+    <script>
+        Vue.component("person-cmp", {
+            // inheritAttrs: false,
+            props: ["personList"],
+            template: `
+                <div class="b">{{ personList }}</div> 
+            `,
+            mounted() {
+                console.log(this.$attrs)
+            }
+        })
+        Vue.component("base-input", {
+            template: `
+                <input 
+                    v-bind="$attrs"
+                />
+            `,
+            mounted() {
+                console.log(this.$attrs)
+            }
+        })
+        const vm = new Vue({
+            el: "#app",
+        })
+    </script>
+</body>
+</html>

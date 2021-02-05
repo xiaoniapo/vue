@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        h5,
+        p {
+            margin: 5px 10px;
+        }
+
+        #app {
+            width: 40vw;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+
+        .container {
+            padding: 5px 30px;
+            box-sizing: border-box;
+        }
+
+        .filter {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .filter input {
+            width: 18vw;
+            height: 24px;
+            border-radius: 5px;
+            outline: none;
+            padding: 0 5px;
+        }
+
+        .filter .btn {
+            margin-left: 30px;
+            display: flex;
+        }
+
+        .filter .btn span {
+            padding: 5px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .filter .btn span.active {
+            background-color: #02B6FD;
+            color: #FFFFFF;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        .container ul li {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .container ul li:not(:last-child) {
+            border-bottom: 1px solid;
+        }
+
+        .container ul li img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .container ul li .description {
+            flex-grow: 1;
+        }
+
+        .description h5 {
+            font-size: 16px;
+        }
+
+        .description p {
+            font-size: 12px;
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="filter container">
+            <input type="text" v-model.trim="searchFilter">
+            <div class="btn">
+                <span v-for="(item, index) in filterSex" :key="item" :class="{active: sexChoose === index}"
+                    @click="exchange(index)">
+                    {{ item }}
+                </span>
+            </div>
+        </div>
+        <nav class="container">
+            <ul v-if="result.length">
+                <li v-for="item in result" :key="item.id">
+                    <div>
+                        <img :src='item.src' :alt="item.des">
+                    </div>
+                    <div class="description">
+                        <h5>{{ item.name }}</h5>
+                        <p>{{ item.des }}</p>
+                    </div>
+                </li>
+            </ul>
+            <p v-else>
+                抱歉，没有找到匹配
+            </p>
+        </nav>
+
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                searchFilter: '', //表示文本框中的输入内容
+                checkFilter: 2, //表示筛选型别选中的值
+                filterSex: ["male", "female", "all"], //表示三个性别筛选按钮中的值
+                personArr: [{
+                        name: '王港',
+                        src: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4005587090,2408158268&fm=26&gp=0.jpg',
+                        des: '颈椎不好',
+                        sex: 'm',
+                        id: '056482'
+                    },
+                    {
+                        name: '刘莹',
+                        src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915784984&di=a0056fd06188e87b922c60878e5ce6e2&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F03%2F79%2F64%2F5c05df1faf3b7_610.jpg',
+                        des: '我是谁',
+                        sex: 'f',
+                        id: '157894'
+                    },
+                    {
+                        name: '刘秀莹',
+                        src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915803971&di=47dc968f55b16a461de3e8f25bdf8600&imgtype=0&src=http%3A%2F%2Fimg.duoziwang.com%2F2016%2F11%2F27%2F190426198344.jpg',
+                        des: '我长得很好看',
+                        sex: 'f',
+                        id: '2849245'
+                    },
+                    {
+                        name: '刘金雷',
+                        src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915748758&di=5be825da4d37bcc21959946c101d5609&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201707%2F19%2F20170719211350_4PnBt.jpeg',
+                        des: '你没有见过陌生的脸',
+                        sex: 'm',
+                        id: '348515'
+                    },
+                    {
+                        name: '刘飞翔',
+                        src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1571915762633&di=49517ca62ecddb638cdfb2158a64e39a&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201702%2F05%2F20170205222154_WLdJS.jpeg',
+                        des: '瓜皮刘',
+                        sex: 'm',
+                        id: '478454'
+                    }
+                ],
+            },
+            methods: {
+                exchange(index) {
+                    if(index === this.checkFilter) {
+                        return;
+                    }
+                    console.log("我点了")
+                    this.checkFilter = index;
+                }
+            },
+            computed: {
+                sexChoose(index) {
+                    return this.checkFilter;
+                },
+                result() { //返回最终要展示的结果
+                    const res = this.contentFilter;
+                    return res;
+                },
+
+                sexFilter() { //根据性别进行返回数据
+                    const sex = this.checkFilter === 2 ? '' : (this.checkFilter === 0 ? 'm' : 'f')
+                    if (sex === '') {
+                        return this.personArr;
+                    }
+                    return this.personArr.filter(item => item.sex === sex)
+                },
+                contentFilter() {
+                    const res = this.sexFilter;
+                    if (this.searchFilter === '') {
+                        return res;
+                    }
+                    return res.filter(item => item.name.includes(this.searchFilter) || item.des.includes(this
+                            .searchFilter))
+                }
+
+            }
+        })
+    </script>
+</body>
+
+</html>

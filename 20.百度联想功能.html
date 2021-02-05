@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #a40;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #app {
+            width: 600px;
+            margin: 0 auto;
+        }
+
+        .search input {
+            width: 450px;
+            height: 36px;
+            border-radius: 10px;
+            outline: none;
+            padding-left: 15px;
+            box-sizing: border-box;
+        }
+
+        .search button {
+            height: 36px;
+            line-height: 36px;
+            width: 90px;
+            background-color: #0192FF;
+            color: #fff;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        ul {
+            width: 450px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding-left: 15px;
+            box-sizing: border-box;
+            max-height: 300px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+        ul li {
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="logo">
+            <img :src="logo" alt="">
+        </div>
+        <div class="search">
+            <input 
+                type="text" 
+                v-model.trim="searchContent"
+                @focus="() => {inputFocus = true}"
+                @blur="()=> {inputFocus = false}"
+            >
+            <button>搜索</button>
+
+            <ul
+                v-show="inputFocus && searchResult.length"
+            >
+                <li
+                    v-for="res in searchResult"
+                    :key="res"
+                >
+                    {{ res }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                logo: "https://www.baidu.com/img/PCfb_5bf082d29588c07f842ccde3f97243ea.png",
+                searchContent: '',
+                searchResult: [],
+                inputFocus: false
+            },
+            methods: {
+                searchRes(data) {
+                    this.searchResult = data.s
+                }
+            },
+            watch: {
+                searchContent() {
+                    $.ajax({
+                        dataType: 'jsonp',
+                        url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+                        data: {
+                            wd: this.searchContent,
+                            cb: "vm.searchRes"
+                        },
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

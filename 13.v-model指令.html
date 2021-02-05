@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <template
+            v-for="num in 5"
+        >
+            <input type="checkbox" :id="'m' + num" :value="'m' + num" v-model="checkList">
+            <label :for="'m' + num">
+                {{ num + 'm' }}
+            </label>
+        </template>
+
+
+        <!-- <input type="text" @input="oInput" :value="msg"> -->
+        <!-- <input type="text" v-model="msg"> -->
+
+        <!-- <input type="checkbox" value="chen" v-model="check"> -->
+
+        <!-- <input type="checkbox" id="chen" value="chen" v-model="checkList">
+        <label for="chen">chen</label>
+        <input type="checkbox" id="wang" value="wang" v-model="checkList">
+        <label for="wang">wang</label>
+        <input type="checkbox" id="xia" value="xia" v-model="checkList">
+        <label for="xia">xia</label> -->
+
+
+        <!-- <input type="radio" id="chen" value="chen" name="firstName" v-model="radioCheck">
+        <label for="chen">chen</label>
+        <input type="radio" id="wang" value="wang" name="firstName" v-model="radioCheck">
+        <label for="wang">wang</label>
+        <input type="radio" id="xia" value="xia" name="firstName" v-model="radioCheck">
+        <label for="xia">xia</label> -->
+
+        <!-- <textarea v-model="msg"></textarea> -->
+
+        <!-- <select v-model="select">
+            <option value="请选择" disabled>请选择</option>
+            <option value="chen">chen</option>
+            <option value="wang">wang</option>
+            <option value="xia">xia</option>
+        </select> -->
+        <!-- <select v-model="selectList" v-model="selectList" multiple>
+            <option value="chen">chen</option>
+            <option value="wang">wang</option>
+            <option value="xia">xia</option>
+        </select> -->
+
+        <!-- <input type="text" v-model.lazy="msg"> -->
+        <!-- <input type="text" v-model.number="num"> -->
+        <!-- <input type="text" v-model.trim="msg"> -->
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "hello, world",
+                check: false,
+                checkList: [],
+                radioCheck: '',
+                select: '请选择',
+                selectList: [],
+                num: "",
+            },
+            methods: {
+                oInput(e) {
+                    this.msg = e.target.value;
+                }
+            }
+        });
+        // setTimeout(() => {
+        //     console.log(vm.msg)
+        // }, 3000)
+    </script>
+</body>
+
+</html>

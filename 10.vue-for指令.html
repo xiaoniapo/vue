@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <ul v-if="show">
+            <!-- <li v-for="(item, index) of persons">
+                {{ item }}---{{ index }}
+            </li> -->
+            <!-- <br>
+            <li v-for="(item, index) in people">
+                {{ item.name }} --- {{ item.age }} --- {{ index }}
+            </li>
+            <br>
+            <li v-for="(value, key, index) in student">
+                {{ value }} --- {{ key }} --- {{ index }}
+            </li>
+            <br>
+            <li v-for="(num, index) in numbers">
+                {{ num }} --- {{ index }}
+            </li>
+            <br>
+            <li v-for="item of string">
+                {{ item }}
+            </li> -->
+
+            <!-- 现要产生如下结构  li和span进行交错 -->
+            <!-- <li v-for="(item, index) in people"> {{ item.name }}</li>
+            <span v-for="(item, index) in people"> {{ item.age }}</span> -->
+            <!-- 如下方法的问题就是会产生div，消耗了一定性能 -->
+            <!-- <div v-for="(item, index) in people">
+                <li>{{ item.name }}</li>
+                <span>{{ item.age }}</span>
+            </div> -->
+            <!-- <template v-for="(item, index) in people">
+                <li>{{ item.name }} --- {{ item.age }}</li>
+                <span>{{ item.age }}</span>
+            </template> -->
+
+            <!-- vue就地更新策略 -->
+
+            <!-- <li v-for="(item, index) in people" :key="item.special">
+                {{ item.name }}--{{ index }}
+                当没有key的时候，文本框中有内容，点击按钮时，文本框并不会移动
+                <input type="text">
+                <button @click="handleClick(index)">下移</button>
+            </li>
+
+            <li>
+                <button @click="show = !show">{{ show ? "文本框一" : "文本框二" }}</button>
+                <input type="text" v-if="show" key="a">
+                <input type="text" v-else key="b">
+            </li> -->
+
+            <!-- 现有如下需求  只渲染people中isActive为true的 
+                因为v-for的优先级高于v-if  故而先生成元素  然后再根据v-if的值判断是否最终有无该元素
+                故而比较消耗性能
+
+                当元素根据自身的属性进行显示的时候
+                方法一: 先把数据过滤加入到vm中，然后遍历过滤后的数据  但必须保证该属性初始化的时候在data中存在，虽然不一定时过滤之后的数据，后期可以通过方法进行修改
+                当所有的元素都根据一个相同的属性进行确定是否渲染时，可以将v-if放到父级上
+            
+            -->
+            <li
+                v-for="item in activePeople"
+                :key="item.special"
+                
+            >
+             {{ item.name }}
+            </li>
+        </ul>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                persons: ["王二麻", "张三", "李四", "王五"],
+                people: [{
+                    name: "王二麻",
+                    age: 19,
+                    special: 1,
+                    isActive: true
+                }, {
+                    name: "张三",
+                    age: 20,
+                    special: 2,
+                    isActive: false
+
+                }, {
+                    name: "李四",
+                    age: 21,
+                    special: 3,
+                    isActive: true
+                }, {
+                    name: "王五",
+                    age: 22,
+                    special: 4,
+                    isActive: false,
+                }],
+                student: {
+                    name: "chen",
+                    age: 19,
+                    grade: 100
+                },
+                numbers: 10,
+                string: "chenwu",
+                show: true,
+                activePeople: null,
+            },
+            methods: {
+                handleClick(index) {
+                    const delPerson = this.people.splice(index, 1);
+                    this.people.splice(index + 1, 0, ...delPerson)
+                }
+            }
+        })
+
+        //处理方法一
+        vm.activePeople = vm.people.filter(item => item.isActive)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #app {
+            width: 50vw;
+            margin: 0 auto;
+            border: 1px solid #000;
+            border-radius: 10px;
+        }
+
+        #app::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .question,
+        .answer {
+            width: 50%;
+            float: left;
+            box-sizing: border-box;
+            padding-left: 20px;
+        }
+
+        .question {
+            border-right: 1px dashed #000;
+        }
+
+        .question h2,
+        .answer h2 {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div v-for="area in title.length" :class="area === 1 ? 'question' : 'answer'">
+            <h2>
+                {{ title[area - 1] }}
+            </h2>
+            <div>
+                <div v-for="(item, index) in questionList" :key="item.id">
+                    <h4>{{ item.title }}</h4>
+                    <!-- 简单题 -->
+                    <template v-if="item.type === 'short'">
+                        <input type="text" v-if="area === 1" v-model.lazy="item.answer">
+                        <span v-else>{{ item.answer }}</span>
+                    </template>
+                    <!-- 单选题 -->
+                    <template v-else-if="item.type === 'single'">
+                        <template v-if="area === 1">
+                            <div v-for="(choose, index) in item.chooseList">
+                                <input type="radio" name="sex" :id="'m' + index" :value="choose" v-model="item.answer">
+                                <label :for="'m' + index">{{ choose }}</label>
+                            </div>
+                        </template>
+                        <span v-else>{{ item.answer }}</span>
+                    </template>
+                    <!-- 多选题 -->
+                    <template v-else-if="item.type === 'multiple'">
+                        <template v-if="area === 1">
+                            <div v-for="(love, index) in item.chooseList">
+                                <input type="checkbox" name="hobby" :id="'n' + index" :value="love"
+                                    v-model="item.answer">
+                                <label :for="'n' + index">{{ love }}</label>
+                            </div>
+                        </template>
+                        <!-- 一开始是没有answer的 -->
+                        <span v-else>{{ item.answer && item.answer.toString() }}</span>
+                    </template>
+                    <!-- 描述题 -->
+                    <template v-else-if="item.type === 'long'">
+                        <textarea v-if="area === 1" v-model="item.answer"></textarea>
+                        <span v-else>{{ item.answer }}</span>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                questionList: [{
+                        type: 'short', //指文本框
+                        title: '1.请问你的姓名是？',
+                        chooseList: null,
+                        id: 0,
+                    },
+                    {
+                        type: 'single', //指单选
+                        title: '2.请问您的性别是？',
+                        chooseList: [
+                            '男',
+                            '女',
+                            '保密',
+                        ],
+                        id: 1,
+                    },
+                    {
+                        type: 'multiple', //指多选
+                        title: '3. 请选择您的兴趣爱好：',
+                        chooseList: [
+                            '看书',
+                            '游泳',
+                            '跑步',
+                            '看电影',
+                            '听音乐',
+                        ],
+                        id: 2,
+                    },
+                    {
+                        type: 'long', //指textarea
+                        title: '4. 请介绍一下自己:',
+                        chooseList: null,
+                        id: 3,
+                    },
+                ],
+                title: ["问题区", "结果区"],
+            }
+        })
+        vm.questionList.forEach(item => {
+            const answer = item.type === 'multiple' ? [] : '';
+            vm.$set(item, "answer", answer);
+        })
+    </script>
+</body>
+
+</html>

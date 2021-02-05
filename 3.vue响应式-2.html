@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{ studentArr[0] }}
+        <!-- {{ stu }} -->
+        <!-- {{ student.grade }} -->
+        <!-- {{ student.sex }} -->
+        <!-- {{ student }} -->
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                studentArr: [1, 2, 3, 4],
+                stu: [123, 456, 789],
+                student: {
+                    name: "chen",
+                    sex: "男",
+                    age: 19
+                }
+            }
+        })
+        //数组的变异方法
+        vm.studentArr.push(5)
+        console.log(vm.studentArr, vm.$el.innerText);//变异方法也是异步操作
+        // vm.studentArr.pop();
+        // console.log(vm.studentArr, vm.$el.innerText);
+        // vm.studentArr.pop();
+        // console.log(vm.studentArr, vm.$el.innerText);
+        // vm.studentArr.splice(1, 2);
+        // console.log(vm.studentArr, vm.$el.innerText);
+
+        vm.$set(vm.studentArr, 0, -1);
+        console.log(vm.studentArr, vm.$el.innerText);
+        Vue.set(vm.studentArr, 0, -2);
+
+        // vm.studentArr[1] = 666;//此种情况并不会导致页面进行刷新
+        // vm.studentArr.reverse().reverse();//可以重新刷新
+        // console.log(vm.studentArr, vm.$el.innerText);
+        // vm.$nextTick(function () {
+        //     console.log(this.$el.innerText)
+        // })
+        vm.$set(vm.student, "wife", "玲");
+        console.log(vm.student, vm.$el.innerText)
+        vm.$delete(vm.student, "age")
+
+
+    </script>
+</body>
+</html>

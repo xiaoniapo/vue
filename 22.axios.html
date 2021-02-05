@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="./axios.js"></script>
+    <style>
+        #app {
+            width: 284px;
+            margin: 50px auto;
+        }
+
+        .username,
+        .mail {
+            width: 284px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .username input,
+        .mail input {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            padding: 10px 8px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            width: 284px;
+            height: 40px;
+            margin-bottom: 10px;
+            line-height: 40px;
+            color: #fff;
+            background-color: #3f89ec;
+            border-radius: 3px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="username">
+            <input type="text" placeholder="用户名" v-model="name">
+        </div>
+        <div class="mail">
+            <input type="text" placeholder="邮箱" v-model="mail">
+        </div>
+        <button @click="setUserInfo">上传数据</button>
+        <button @click="getUserInfo">请求数据</button>
+        <button @click="getInfo">并发请求</button>
+        <button @click="cancel">取消请求</button>
+    </div>
+    <script>
+        axios.defaults.baseURL = "https://developer.duyiedu.com/vue"
+        const instancePost = axios.create({
+            // baseURL: "https://baidu.com",
+            baseURL: "https://developer.duyiedu.com/vue"
+        })
+        const requestInter = axios.interceptors.request.use(config => {
+            console.log(config);
+            // config.baseURL="https://www.baidu.com"
+            return config
+        }, error => {
+            return Promise.reject(error)
+        })
+        const responseInter = axios.interceptors.response.use(res => {
+            console.log(res);
+            return res.data.data
+        }, error => {
+            console.log(error.response)
+            console.log(error.request)
+            if (error.response) { //表示响应时错误
+                console.log("响应时错误");
+            } else if (error.request) {
+                console.log("请求时错误");
+            } else {//此时并不会进行例
+                console.log("请求未发出!!!")
+            }
+            return Promise.reject(error)
+        });
+        // console.log(requestInter, responseInter)
+        // axios.interceptors.request.eject(requestInter);
+        // axios.interceptors.response.eject(responseInter);
+
+        const CancelToken = axios.CancelToken;
+        const source = CancelToken.source();
+
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "",
+                allData: "",
+                name: "",
+                mail: "",
+            },
+            methods: {
+                cancel() {
+                    source.cancel('Operation canceled by the user.'); //取消请求
+                },
+                getUserInfo() {
+                    axios.get("/getUserInfo1", {
+                        cancelToken: source.token //进行标记
+                    }).then(res => {
+                        this.allData = res
+                    }).catch(error => {
+                        // console.log(typeof error)
+                        // console.log(error.response)
+                        // console.log(error.request)
+                        // if (error.response) { //表示响应时错误
+                        //     console.log("响应时错误");
+                        // } else if (error.request) {
+                        //     console.log("请求时错误");
+                        // } else {
+                        //     console.log("请求未发出")
+                        // }
+                    })
+                },
+                setUserInfo() {
+                    // const {
+                    //     name,
+                    //     mail
+                    // } = this
+                    instancePost.post("https://developer.duyiedu.com/vue/setUserInfo", {
+                        name: "",
+                        mail: ""
+                    }).then(res => {
+                        // console.log(res)
+                        this.msg = res;
+                    })
+                },
+                getInfo() {
+                    const {
+                        name,
+                        mail
+                    } = this
+                    axios.all([
+                        axios.post("/setUserInfo", {
+                            name,
+                            mail
+                        }),
+                        axios.get("/getUserInfo")
+                    ]).then(axios.spread((setInfo, getInfo) => {
+                        console.log(setInfo, getInfo);
+                    }))
+                }
+            },
+            watch: {
+                msg() {
+                    if (this.msg === '') {
+                        return;
+                    }
+                    console.log(this.msg);
+                    this.msg = "";
+                    this.name = "";
+                    this.mail = "";
+                },
+                allData() {
+                    console.log(this.allData)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

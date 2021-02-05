@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- <div v-if="show === 'A'">
+            {{ msg }}
+        </div>
+        <span>hhhh</span>
+        <div v-else-if="show === 'B'">
+            wu
+        </div>
+        <div v-else-if="show === 'C'">
+            玲
+        </div>
+        <div v-else>
+            wan
+        </div> -->
+        <!-- <div v-if="show">陈武</div>
+        <div v-if="show">陈武</div>
+        <div v-if="show">陈武</div>
+        <div v-if="show">陈武</div>
+        <div v-if="show">陈武</div> -->
+
+        <!-- <template v-if="show">
+            <div>陈武</div>
+            <div>陈武</div>
+            <div>陈武</div>
+            <div>陈武</div>
+            <div>陈武</div>
+        </template> -->
+        <div v-show="true">陈武</div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "chen",
+                show: true,
+            }
+        })
+    </script>
+</body>
+</html>

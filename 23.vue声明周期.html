@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="./axios.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button @click="handleClick">点击</button>
+        {{ msg }}
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            // template: `<div id="app-0">{{ msg }}</div>`
+            data: {
+                msg: "我是模板",
+                data: null,
+            },
+            methods: {
+                handleClick() {
+                    this.msg = "按钮点击了"
+                }
+            },
+            watch: {
+                msg: {
+                    handler() {
+                        console.log("msg变化了");
+                    },
+                    immediate: true
+                }
+            }, 
+            beforeCreate() {
+                console.time("构建");
+                console.log("-----beforeCreate----");
+                // this.msg = "123" 书写无效  因为会被覆盖
+                console.log(this.msg);//undefined
+                console.log(this.handleClick);//undefined
+            },
+            created() {
+                console.log("----created----");
+                console.log(this.msg);//我是模板
+                console.log(this.$el);
+                this.msg = "123";
+                //发出数据请求
+                axios.get("https://developer.duyiedu.com/vue/getUserInfo").then(res => {
+                    this.data = res
+                })
+
+                // this.timer = setInterval(() => {
+                //     console.log(1)
+                // }, 500)
+            },
+            beforeMount() {
+                console.log("----beforeMount----");
+                console.log(this.$el);
+                //如下最终操作无效，因为会在下一步被替换
+                // const span = document.createElement("span");
+                // span.innerText = "我是在beforemount新添加的"
+                // this.$el.appendChild(span)
+            },
+            mounted() {
+                console.timeEnd("构建")
+                console.log("----mounted----");
+                console.log(this.$el);
+                const span = document.createElement("span");
+                span.innerText = "我是在mounted新添加的"
+                this.$el.appendChild(span)
+            },
+
+
+            beforeUpdate() {
+                console.log("----beforeUpdate----");
+                console.log(this.$el.outerHTML)//因为dom也是也是一个引用，而浏览器就是输出引用的，如果直接输出this.$el就会输出跟新后的
+            },
+            updated() {
+                console.log("----updated----");
+                console.log(this.$el.outerHTML)
+            },
+            beforeDestroy() {
+                console.log("----beforeDestroy----");
+                console.log(this.$el);
+                clearInterval(this.timer)
+            },
+            destroyed() {
+                console.log("----destroyed----")
+            }
+        })
+        // vm.$mount("#app")
+    </script>
+</body>
+</html>

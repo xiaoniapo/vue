@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- {{ student.age }} -->
+        <!-- {{ msg,name }} -->
+        <!-- {{ name }} -->
+
+        <!-- {{ undefined }} -->
+        <!-- {{ msg }} -->
+
+        <!-- {{ "万古神帝" }}
+        {{ true }}
+        {{ 123 }}
+        {{  {
+            name: "chen",
+            age: 19
+        } }}
+        {{
+            [1, 2, 3]
+        }} -->
+
+        <!-- {{{name:456}}} 报错 -->
+
+        <!-- {{ 1 + 2 }} -->
+        <!-- {{ if(1 + 1 === 2) {return 123}}} -->
+        <!-- {{ 1 === 1 ? 123 : 456}} -->
+        <!-- {{ "liu" && "li" }} -->
+    </div>
+    <script>
+        // const vm = new Vue({
+        //     data: {
+        //         name: 456,
+        //     }
+        // })
+        // setTimeout(() => {
+        //     console.log("我执行了")
+            // vm.$mount = "#app"
+        // }, 1000);
+
+
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "function",
+                name: "123",
+                student: {
+                    name: "chen",
+                    
+                }
+            }
+        })
+    </script>
+</body>
+</html>

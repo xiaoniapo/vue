@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <base-div>
+            123456
+            <div>445456486 4</div>
+            <!--  -->
+            {{ name }}
+        </base-div>
+    </div>
+    <script>
+        Vue.component("base-div", {
+            data() {
+                return {
+                    name: "我是组件"
+                }
+            },
+            template: `
+                <div>
+                    <slot></slot>
+                </div>
+            `
+        });
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                name: "我是根实例"
+            }
+        })
+    </script>
+</body>
+</html>

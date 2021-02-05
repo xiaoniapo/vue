@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <style>
+        #app {
+            width: 80vw;
+            border: 1px solid;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        #app::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .question,
+        .anwser {
+            width: 50%;
+            float: left;
+            padding-left: 25px;
+            box-sizing: border-box;
+            padding-bottom: 20px;
+        }
+
+        .question h2,
+        .anwser h2 {
+            text-align: center;
+        }
+
+        .question {
+            border-right: 1px dashed;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div v-for="item in all" :class="item.type">
+            <h2>
+                {{ item.title }}
+            </h2>
+            <div v-if="item.type === 'question'">
+                <div
+                    v-for="index in problem.length"
+                >
+                    <h4>{{ index }}.{{ problem[index - 1].question }}</h4>
+                    <div v-if="index === 1">
+                        <input type="text" v-model.lazy="problem[0].anwser">
+                    </div>
+                    <div v-else-if="index === 2">
+                        <div
+                            v-for="type in sex"
+                        >
+                            <input type="radio" name="sex" :value="type.type" :id="type.id" v-model="problem[1].anwser">
+                            <label :for="type.id">
+                                {{ type.type }}
+                            </label>
+                        </div>
+                    </div>
+                    <div v-else-if="index === 3">
+                        <div
+                            v-for="love in hobby"
+                        >
+                            <input type="checkbox" name="hobby" :value="love" :id="love" v-model="problem[2].anwser">
+                            <label :for="love">
+                                {{ love }}
+                            </label>
+                        </div>
+
+                    </div>
+                    <div v-else>
+                        <textarea v-model.lazy="problem[3].anwser"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <div v-for="(items, index) in problem">
+                    <h4>{{ index + 1 }}.{{ items.question }}</h4>
+                    <div>
+                        {{ typeof items.anwser === "object" ? items.anwser.join(',') : items.anwser }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                all: {
+                    question: {
+                        title: "提问区",
+                        type: "question",
+                    },
+                    anwser: {
+                        title: "结果区",
+                        type: "anwser",
+                    }
+                },
+                problem: [{
+                    question: "你的姓名是？",
+                    anwser: '',
+                }, {
+                    question: "你的性别时？",
+                    anwser: '`',
+                }, {
+                    question: "请选择你的爱好",
+                    anwser: [],
+                }, {
+                    question: "请介绍一下你",
+                    anwser: ''
+                }],
+                sex: [{
+                    type: "男",
+                    id: "male",
+
+                }, {
+                    type: "女",
+                    id: "female",
+                }, {
+                    type: "保密",
+                    id: "secret",
+                }],
+                question: true,
+                hobby: ["basketball", "rap", "music", "sport", "art", "movies"],
+            }
+        })
+    </script>
+</body>
+
+</html>

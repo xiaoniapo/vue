@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ff4400;
+        }
+
+        h2,
+        h3 {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #app {
+            width: 50vw;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px 30px;
+        }
+
+        .header {
+            width: 100%;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .header h3 {
+            margin-left: 20px;
+        }
+
+        .main {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .main .course {
+            width: 100%;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .course img {
+            width: 80px;
+            height: 80px;
+            margin-left: 25px;
+        }
+
+        .course .content {
+            flex-grow: 1;
+            height: 80px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content h2 {
+            font-size: 16px;
+            margin-bottom: 4px；
+        }
+
+        .price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .price .left,
+        .price .right span {
+            color: #ff4400;
+        }
+
+        .right span {
+            padding: 3px;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer input {
+            margin-right: 5px;
+        }
+
+        .footer button {
+            width: 60px;
+            padding: 8px;
+            background-color: #f40;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            color: #fff;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <input type="checkbox" v-model="selectAll">
+            <h3>{{ institution }}</h3>
+        </div>
+        <ul class="main">
+            <li class="course" v-for="(course, index) in courseList" :key="course.id">
+                <input type="checkbox" name="course" v-model="course.checked">
+                <img :src="course.poster" :alt="course.title">
+                <div class="content">
+                    <h2>{{ course.title }}</h2>
+                    <div class="price">
+                        <div class="left">￥{{ course.price }}</div>
+                        <div class="right">
+                            <button @click="changeCart('-', course)">-</button>
+                            <span>{{ course.cart }}</span>
+                            <button @click="changeCart('+', course)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="footer">
+            <div>
+                <input type="checkbox" v-model="selectAll">
+                <span>全选</span>
+            </div>
+            <div>
+                <span>合计:</span>
+                <span class="total">￥{{ totalPrice }}</span>
+                <button>结算({{ getType }})</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                all: false,
+                institution: "渡一教育web前端",
+                courseList: [{
+                        poster: 'https://img.alicdn.com/bao/uploaded/i1/TB1VtAgdlWD3KVjSZFs3KIqkpXa_040950.jpg_80x80.jpg',
+                        title: '渡一教育 CSS3 深度剖析',
+                        price: 1299,
+                        cart: 1,
+                        id: 0,
+                    },
+                    {
+                        poster: 'https://img.alicdn.com/bao/uploaded/i7/TB1_VJecBWD3KVjSZKPagip7FXa_045814.jpg_80x80.jpg',
+                        title: '渡一教育 移动端开发课程',
+                        price: 1148,
+                        cart: 1,
+                        id: 1595402664708
+                    },
+                    {
+                        poster: 'https://img.alicdn.com/bao/uploaded/i2/TB1J.Q4cQxz61VjSZFto7uDSVXa_010347.jpg_80x80.jpg',
+                        title: '渡一教育 2019年 HTMLCSS零基础入学宝典',
+                        price: 1,
+                        cart: 1,
+                        id: 1596305473062
+                    },
+                    {
+                        poster: 'https://img.alicdn.com/bao/uploaded/i2/TB1bHwlaCWD3KVjSZSgVbgCxVXa_032434.jpg_80x80.jpg',
+                        title: '渡一教育 Web前端开发JavaScriptJs课',
+                        price: 1,
+                        cart: 1,
+                        id: 1595413512182
+                    },
+                    {
+                        poster: 'https://img.alicdn.com/bao/uploaded/i2/TB1MJd3g4z1gK0jSZSgnHevwpXa_014447.jpg_80x80.jpg',
+                        title: 'Web前端开发高级工程师全阶班【渡一教育】',
+                        price: 12798,
+                        cart: 1,
+                        id: 1596302161181
+                    },
+                    {
+                        poster: 'https://img.alicdn.com/bao/uploaded/i6/TB1xPeAbwaH3KVjSZFpjaLhKpXa_105848.jpg_80x80.jpg',
+                        title: '渡一教育 Java零基础入门到精通（集合，泛型等）',
+                        price: 1,
+                        cart: 1,
+                        id: 1596300025301,
+                    },
+                ]
+            },
+            methods: {
+                changeCart(type, course) {
+                    if(type === "+") {
+                        course.cart ++;
+                    } else {
+                        if(course.cart === 1) {
+                            alert("该商品至少选一个")
+                        } else {
+                            course.cart --
+                        }
+                    }
+                },
+            },
+            computed: {
+                checkedFilter() {
+                    return this.courseList.filter(item => item.checked);
+                },
+                getType() {
+                    return this.checkedFilter.length;
+                },
+                totalPrice() {
+                    return this.checkedFilter.reduce((prev, cur) => prev + cur.cart * cur.price, 0)
+                },
+                selectAll: {
+                    get() {//就是将每一个item变成true
+                        return this.courseList.every(item => item.checked)
+                    },
+                    set(newVal) {
+                        this.courseList.forEach(item => item.checked = newVal);
+                    }
+                }
+            }
+        })
+        vm.courseList.forEach(item => vm.$set(item, "checked", false))//在每一个数据对象都添加一个属性监控自己是否又被选中
+    </script>
+</body>
+</html>

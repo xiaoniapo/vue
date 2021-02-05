@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <script src="./axios.js"></script>
+    <style>
+        * {
+            margin: 0;
+        }
+        .video-list {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .video-item {
+            width: 50%;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+
+        .video {
+            width: 100%;
+            height: 120px;
+            position: relative;
+        }
+
+        .poster {
+            width: 100%;
+            height: 100%;
+        }
+
+        .poster img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .des {
+            font-size: 12px;
+            color: #fff;
+            background-color: rgba(0, 0, 0, .4);
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .play,
+        .rank {
+            display: flex;
+            align-items: center;
+        }
+        .play {
+            margin-left: 10px;
+        }
+        .rank{
+            margin-right: 10px;
+        }
+        .title {
+            height: 32px;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #212121;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <div class="video-list">
+            <div 
+                class="video-item"
+                v-for="video in videoLists"
+                :key="video.key"
+            >
+                <div class="video">
+                    <div class="poster">
+                        <img :src="video.poster"
+                            :alt="video.title">
+                    </div>
+                    <div class="des">
+                        <div class="play">
+                            <svg width="20" height="20" fill="#fff" viewBox="0 0 1024 1024">
+                                <path
+                                    d="M800 128H224C134.4 128 64 198.4 64 288v448c0 89.6 70.4 160 160 160h576c89.6 0 160-70.4 160-160V288c0-89.6-70.4-160-160-160z m96 608c0 54.4-41.6 96-96 96H224c-54.4 0-96-41.6-96-96V288c0-54.4 41.6-96 96-96h576c54.4 0 96 41.6 96 96v448z">
+                                </path>
+                                <path
+                                    d="M684.8 483.2l-256-112c-22.4-9.6-44.8 6.4-44.8 28.8v224c0 22.4 22.4 38.4 44.8 28.8l256-112c25.6-9.6 25.6-48 0-57.6z">
+                                </path>
+                            </svg>
+                            <span>{{ video.play }}</span>
+                        </div>
+                        <div class="rank">
+                            <svg width="20" height="20" fill="#fff" viewBox="0 0 1024 1024">
+                                <path
+                                    d="M800 128H224C134.4 128 64 198.4 64 288v448c0 89.6 70.4 160 160 160h576c89.6 0 160-70.4 160-160V288c0-89.6-70.4-160-160-160z m96 608c0 54.4-41.6 96-96 96H224c-54.4 0-96-41.6-96-96V288c0-54.4 41.6-96 96-96h576c54.4 0 96 41.6 96 96v448z">
+                                </path>
+                                <path d="M240 384h64v64h-64zM368 384h384v64h-384zM432 576h352v64h-352zM304 576h64v64h-64z">
+                                </path>
+                            </svg>
+                            <span>{{ video.rank }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="title">{{ video.title }}</div>
+            </div>
+            <video-item
+                v-for="video in videoLists"
+                :key="video.key"
+                :poster="video.poster"
+                :title="video.title"
+                :play="video.play"
+                :rank="video.rank"
+            ></video-item>
+        </div> -->
+        <video-list :video-lists="videoLists"></video-list>
+    </div>
+    <script>
+        Vue.component("video-list", {
+            props: ["videoLists"],
+            template: `
+            <div class="video-list">
+                <video-item
+                    v-for="video in videoLists"
+                    :key="video.id"
+                    v-bind="video"
+                ></video-item>
+            </div>
+            `
+        })
+        Vue.component("video-item", {
+            props: ["poster", "title", "play", "rank"],
+            template: `
+                <div class="video-item">
+                    <div class="video">
+                        <div class="poster">
+                            <img :src="poster" :alt="title">
+                        </div>
+                        <div class="des">
+                            <div class="play">
+                                <svg width="20" height="20" fill="#fff" viewBox="0 0 1024 1024">
+                                    <path
+                                        d="M800 128H224C134.4 128 64 198.4 64 288v448c0 89.6 70.4 160 160 160h576c89.6 0 160-70.4 160-160V288c0-89.6-70.4-160-160-160z m96 608c0 54.4-41.6 96-96 96H224c-54.4 0-96-41.6-96-96V288c0-54.4 41.6-96 96-96h576c54.4 0 96 41.6 96 96v448z">
+                                    </path>
+                                    <path
+                                        d="M684.8 483.2l-256-112c-22.4-9.6-44.8 6.4-44.8 28.8v224c0 22.4 22.4 38.4 44.8 28.8l256-112c25.6-9.6 25.6-48 0-57.6z">
+                                    </path>
+                                </svg>
+                                <span>{{ play }}</span>
+                            </div>
+                            <div class="rank">
+                                <svg width="20" height="20" fill="#fff" viewBox="0 0 1024 1024">
+                                    <path
+                                        d="M800 128H224C134.4 128 64 198.4 64 288v448c0 89.6 70.4 160 160 160h576c89.6 0 160-70.4 160-160V288c0-89.6-70.4-160-160-160z m96 608c0 54.4-41.6 96-96 96H224c-54.4 0-96-41.6-96-96V288c0-54.4 41.6-96 96-96h576c54.4 0 96 41.6 96 96v448z">
+                                    </path>
+                                    <path d="M240 384h64v64h-64zM368 384h384v64h-384zM432 576h352v64h-352zM304 576h64v64h-64z">
+                                    </path>
+                                </svg>
+                                <span>{{ rank }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="title">{{ title }}</div>
+                </div>
+            `
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                videoList: [],
+            },
+            created() {
+                axios.get("https://developer.duyiedu.com/vue/bz/video", {
+                    params: {
+                        start: 0,
+                        offset: 12,
+                    }
+                }).then(res => {
+                    this.videoList = res.data.data
+                })
+            },
+            computed: {
+                videoLists() {
+                    this.videoList.forEach(item => {
+                        if(item.play > 10000) {
+                            item.play = (item.play / 10000).toFixed(1);
+                            item.play += "万";
+                        }
+                        if(!item.rank) {
+                            item.rank = Math.floor(Math.random() * 1000);
+                        } 
+                        if(item.rank > 10000) {
+                            item.rank = (item.rank / 10000).toFixed(1);
+                            item.rank += "万";
+                        }
+                    })
+                    return this.videoList
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

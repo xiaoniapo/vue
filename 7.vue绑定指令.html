@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <style>
+        .a {
+            display: -ms-flexbox;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <div v-bind:a="msg"></div> -->
+        <!-- <div :b="'a'"></div> -->
+        <!-- <img :src="'https://' + imgUrl" alt=""> -->
+        <!-- <div v-bind="{a: 'name', [word]: msg, c: 'n' + msg}"></div> -->
+        <!-- <div :class="red + ' ' + green"></div> -->
+
+        <!-- <div :class="{[red]: isRed, green: isGreen, black: null}"></div>
+        <div :class="['red', [red], {green: isGreen}]"></div>
+        <div :class="{red: isRed, green: isGreen}" class="red1"></div> -->
+
+        <!-- <div :style="{fontSize: size, [color]: 'red', 'background-color': 'yellow'}">玲</div>
+        <div :style="[style1, style2, {fontSize: '30px'}]">武</div>
+        <div :style="style1">陈</div> -->
+
+        <!-- <div :style="{display: ['flex', '-webkit-flex', '-ms-flexbox']}"></div> -->
+        <!-- <div :style="{textStroke: '5px red'}">14</div> -->
+
+        <!-- <div v-bind="{class: {red: isRed}}"></div> -->
+        <!-- <div v-bind="{class: [red, {red: isRed}]}"></div> -->
+        <!-- <div v-bind="{style: {color: 'red'}}">陈</div> -->
+        <!-- <div v-bind="{style: [style1, {color: 'green'}]}"> {{ msg }} </div> -->
+
+        <!-- <svg :reDem="123"></svg> -->
+        <!-- <svg :view-box.camel="0"></svg> -->
+        <!-- <div :text-content.prop="'我是属性'"></div> -->
+
+
+
+
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "1",
+                name: "a",
+                word: "word",
+                imgUrl: "dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1114088632,2546545526&fm=26&gp=0.jpg",
+                isRed: true,
+                isGreen: 1,
+                red: "iRed",
+                size: "4em",
+                color: "color",
+                style1: {
+                    backgroundColor: "red",
+                    fontSize: "5em"
+                },
+                style2: {
+                    'background-color': "green",
+                    color: "blue"
+                }
+                // red: "red",
+                // green: "green"
+            }
+        })
+    </script>
+</body>
+
+</html>

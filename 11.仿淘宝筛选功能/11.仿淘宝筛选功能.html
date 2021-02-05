@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 每一个模板生成一ul -->
+        <div class="item" v-for="(goodList, goodListIndex) in goodsList" :key="goodList.id">
+            <div class="title">
+                {{ goodList.title }}:
+            </div>
+            <div class="listContainer">
+                <ul class="list">
+                    <li 
+                        v-for="(item, index) in goodList.typeList" 
+                        :key="item"
+                        :class="{active: index === selectedArr[goodListIndex].col}"
+                        @click="select(goodListIndex, index)"
+                    >
+                        {{ item }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="result">
+            <h5>最终筛选结果: </h5>
+            <div class="filterRes">
+                <p v-if="selectAll.length === 0">没有筛选结果</p>
+                <div class="filterItem" v-else>
+                    <div class="filter" v-for="(item, index) in selectAll" :key="item.content">
+                        <span class="content">{{ item.content }}</span>
+                        <span class="delete" @click="del(item, index)">X</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

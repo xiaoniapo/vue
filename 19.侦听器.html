@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ msg }}
+        {{ age }}
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "hello,world",
+                name: "chen",
+                age: 88,
+                stu: {
+                    name: "chen",
+                    age: 19,
+                    sex: "m"
+                },
+                arr: "我是arr"
+            },
+            methods: {
+                ageChange(newVal, oldVal) {
+                    console.log("age改变了");
+                    console.log(newVal, oldVal)
+                },
+                change() {
+                    console.log("我改变了")
+                }
+            },
+            computed: {
+                getAge() {
+                    setTimeout(() => {  //书写无效
+                        console.log("我执行了")
+                        this.age = 99
+                    }, 0)
+                    return this.age
+                }
+            },
+            watch: {
+                msg(newval, oldVal) {
+                    setTimeout(() => {//可以执行
+                        this.msg = '123'
+                    }, 0)
+                    console.log("msg变化了");
+                    console.log(newval, oldVal)
+                },
+                name(newVal, oldVal) {
+                    console.log("name变化了");
+                    console.log(newVal, oldVal)
+                },
+                age: "ageChange",
+                stu: {//此时监听对象的时候，默认只是监听到整个对象了，但是当里面的数据进行改变时，并不会指向handler函数
+                    handler(newVal, oldVal) {
+                        console.log("stu变化了");
+                        console.log(newVal, oldVal);
+                    },
+                    // deep: true,//使得对象里面的属性也可以被监控，当对象里面的数据发生改变的时候会执行上面的handler函数
+                    // immediate: true
+                },
+                arr: [
+                    'change',
+                    function () {console.log("我改变了")},
+                    {
+                        handler(){console.log("我改变了")}
+                    }
+                ],
+                // stu.name () {} 会报错
+                'stu.name'(newVal, oldVal) {
+                    console.log("stu.name发生改变");
+                    console.log(newVal, oldVal);
+                }
+            }
+        })
+        // vm.$watch('msg', (newVal, oldVal) => {
+        //     console.log("msg变化了");
+        //     console.log(newVal, oldVal)
+        // }, {
+        //     immediate: true,
+        //     deep: true
+        // })
+
+        // var unWatch = vm.$watch(function () {
+        //     if(unWatch) {
+        //         unWatch();
+        //     }
+        //     console.log("haha")
+        //     return this.msg + this.name;
+        // }, (newVal, oldVal) => {}, {
+        //     // immediate: true
+        // });
+    </script>
+</body>
+
+</html>

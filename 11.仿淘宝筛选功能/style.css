@@ -1,0 +1,87 @@
+body{
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+p, h5{
+    margin: 0;
+    font-size: 20px
+}
+#app{
+    width: 50%;
+    border: 1px solid #ccc;
+    margin: 30px auto;
+}
+.item {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.title{
+    width: 60px;
+    text-align: center;
+}
+.listContainer {
+    flex-grow: 1;
+}
+.listContainer ul{
+    display: flex;
+}
+.listContainer ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+/* 做li被选中的效果 */
+.listContainer ul li.active{
+    color: #fff;
+    background-color: #f40;
+}
+
+.result{
+    padding-left: 15px;
+    display: flex;
+    height: 40px;
+    align-items: center;
+}
+.result h5 {
+    font-weight: 550;
+}
+.result .filterRes{
+    flex-grow: 1;
+    padding-left:  25px;
+    
+}
+
+.result .filterRes p {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.result .filterRes .filterItem {
+    display: flex;
+}
+.result .filterRes .filterItem .filter{
+    background-color: #f40;
+    margin-right: 15px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+.result .filterRes .filterItem .filter .content {
+    font-size: 18px;
+}
+.result .filterRes .filterItem .filter .delete {
+    cursor: pointer;
+    color: #ccc;
+    font-size: 14px;
+}
+

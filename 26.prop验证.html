@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <person-list :person-list="personList"></person-list>
+    </div>
+    <script>
+        Vue.component("person-list", {
+            props: {
+                personList: {
+                    type: null,
+                    default() {
+                        return [
+                            {name: "chen"},
+                            {name: "wang"}
+                        ]
+                    },
+                    required: true,
+                    validator(prop) {
+                        console.log(prop);
+                        return true
+                    }
+                }
+            },
+            template: `
+                <ul>
+                    <li v-for="person in personList">
+                        {{ person.name }}
+                    </li>
+                </ul>
+            `,
+            created() {
+                console.log(this.personList)
+            }
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                personList: [
+                    {name: "chen"},
+                    {name: "wang"}
+                ],
+                // personList: null
+            }
+        })
+    </script>
+</body>
+</html>

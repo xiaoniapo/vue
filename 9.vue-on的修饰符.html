@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- <div @click="alert('div')" :style="{backgroundColor: 'red',height: '100px'}">
+            <button @click.stop="alert('button')">点击</button>
+        </div> -->
+        <!-- <form @submit.prevent="submit">
+            <input type="submit" value="提交">
+        </form> -->
+        <!-- <div @click.capture="alert('div')" :style="{backgroundColor: 'red',height: '100px'}">
+            <button @click="alert('button')">点击</button>
+        </div> -->
+        <!-- <div @click.self="alert('div')" :style="{backgroundColor: 'red',height: '100px'}">
+            <button @click="alert('button')">点击</button>
+        </div> -->
+        <!-- <div @click.once="alert('div')" :style="{backgroundColor: 'red',height: '100px'}">
+            <button @click="alert('button')">点击</button>
+        </div> -->
+        <!-- <div @click="alert('div')" :style="{backgroundColor: 'red',height: '100px'}">
+            <button @click.passive="alert('button')">点击</button>
+        </div> -->
+        <!-- <input type="text" @keyup="event"> -->
+
+        <!-- 仅当按键为回车的时候才会触发事件 -->
+        <!-- <input type="text" @keyup.enter="event"> -->
+        <!-- <input type="text" @keyup.13="event"> -->
+        <!-- 仅当按键时上箭头时才能触发事件 -->
+        <!-- <input type="text" @keyup.arrow-up="event"> -->
+
+        <!-- 按着tctrl键抬起其它键才会触发 -->
+        <!-- <input type="text" @keyup.ctrl="event"> -->
+        <!-- 只有按着ctrl键抬起enter键才会触发 -->
+        <!-- <input type="text" @keyup.ctrl.enter="event"> -->
+
+        <button @click.ctrl="event">A</button>
+        <button @click.exact.ctrl="event">B</button>
+
+        <button @click.left="event">左键</button>
+        <button @click.right.prevent="event">右键</button>
+        <button @click.middle="event">中键</button>
+
+
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "数据"
+            },
+            methods: {
+                alert(str) {
+                    alert(str)
+                },
+                submit() {
+                    console.log("a");
+                },
+                event() {
+                    console.log("按键了");
+                }
+            }
+        })
+    </script>
+</body>
+</html>

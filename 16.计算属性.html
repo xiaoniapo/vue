@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 诸如此类都是逻辑  我们应该尽量减少在模板中的使用 -->
+        <!-- {{ msg.split('').reverse().join('') }} -->
+        <div v-if="num > 8">123456</div>
+
+        <!-- {{ msgReverse }} -->
+        <br>
+        {{ name }}
+        <br>
+        {{ myName() }}
+        <br>
+        {{ getAge }}
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "hello, world",
+                num: 10,
+                age: 88
+            },
+            methods: {
+                myName() {
+                    console.log("methods")
+                    return this.msg;
+                }
+            },
+            computed: {
+                msgReverse() {
+                    return this.msg.split("").reverse().join("");
+                },
+                name() {
+                    console.log("computed")
+                    return this.msg;
+                },
+                getAge: {
+                    get() {
+                        console.log("我获取了")
+                        return this.age
+                    },
+                    set(newVal) {
+                        this.age = newVal;
+                        console.log("我设置了", newVal)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

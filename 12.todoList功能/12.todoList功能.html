@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h3>todoList</h3>
+            <input type="text" @input="input" :value="content">
+            <input type="submit" value="添加" @click="submit">
+        </div>
+        <div class="main">
+            <div 
+                v-for="item in task"
+                :class="item.classes"
+            >
+                <div class="title">
+                    <h3>{{ item.title }}</h3>
+                    <div class="total">{{ item.data.length }}</div>
+                </div>
+                <ul class="list">
+                    <li 
+                        v-for="(data, index) in item.data"
+                        :key="data.id"
+                    >
+                        <input type="radio" @click="handleClick(item.classes, index)">
+                        <div class="target">
+                            {{ index + 1 }}.{{ data.content }}
+                        </div>
+                        <button @click="del(item, index)">删除</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>

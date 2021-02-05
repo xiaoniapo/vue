@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 父级
+        {{ counter }}
+        <button @click="counter ++">父级</button>
+        <br>
+        <my-cmp :counter="counter"></my-cmp> -->
+
+        
+        <!-- {{ arr }}
+        <cmp-arr :arr="arr"></cmp-arr> -->
+
+    </div>
+    <script>
+        Vue.component("cmp-arr", {
+            props: ["arr"],
+            data() {
+                return {
+                    myArr: this.arr
+                }
+            },
+            template: `
+                <div>
+                    {{ myArr }}
+                    <button @click="myArr.push(4)">子级</button>
+                </div>
+            `
+        })
+        Vue.component("my-cmp", {
+            props: ["counter"],
+            data() {
+                return {
+                    count: this.counter
+                }
+            },
+            template: `
+                <div>
+                    子级
+                    {{ count }}
+                    <button @click="count ++">子级</button>
+                </div>
+            `,
+            watch: {
+                count() {
+                    console.log("count改变了")
+                } 
+            }
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                counter: 0,
+                arr: [1, 2, 3]
+            },
+
+        })
+    </script>
+</body>
+</html>
