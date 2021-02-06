@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- <my-cmp
+            :val="val"
+            :person-list="personList"
+            @my-click="handleClick"
+        ></my-cmp> -->
+        <!-- <my-cmp1
+            :value="val"
+            @input="val = $event"
+        ></my-cmp1> -->
+        <!-- <my-cmp1
+            v-model="val"
+        >
+        </my-cmp1> -->
+
+        <!-- <base-checkbox
+            :checked="flag"
+            @change="changes"
+        ></base-checkbox> -->
+        <!-- <base-checkbox
+            v-model="flag"
+        ></base-checkbox> -->
+        <!-- <base-input :value="val" @update:value='val = $event'></base-input> -->
+        <!-- <base-input :value.sync="val"></base-input> -->
+        <base-test
+            type="text"
+            class="active"
+            @focus="f"
+            @blur="b"
+        ></base-test>
+    </div>
+    <script>
+        Vue.component("base-test", {
+            inheritAttrs: false,
+            template: `
+                <label>
+                    <input :type="$attrs.type" v-on="$listeners" />
+                </label>
+            `,
+            mounted() {
+                console.log(this.$attrs);
+                console.log(this.$listeners)
+            }
+        })
+        Vue.component("base-input", {
+            props: ["value"],
+            template: `
+                <label>
+                    姓名：
+                    <input type="text" :value="value" @input="$emit('update:value', $event.target.value)" />
+                </label>
+            `
+        })
+        Vue.component("base-checkbox", {
+            model: {
+                prop: "checked",
+                event: "change"
+            },
+            props: ["checked"],
+            template: `
+                <input type="checkbox"  :checked="checked" @change="$emit('change', $event.target.checked)"  />
+            `,
+        })
+        Vue.component("my-cmp1", {
+            props: ["value"],
+            template: `
+                <label>
+                    姓名：
+                    <input type="text" :value="value" @input="$emit('input', $event.target.value)" />
+                </label>
+            `
+        })
+        Vue.component("my-cmp", {
+            props: {
+                val: Number,
+                personList: Array
+            },
+            template: `
+            <div @click="$emit('my-click', val)">
+                {{ val }}    
+                <cmp-item v-for="person in personList" :key="person.name" v-bind="person" />
+            </div>
+            `
+        });
+
+        Vue.component("cmp-item", {
+            props: ["name", "age"],
+            template: `
+                <div>
+                    {{ name }}---{{ age }}
+                </div>
+            `
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                val: 123,
+                personList: [{
+                    name: "chen",
+                    age: 19
+                }, {
+                    name: "ling",
+                    age: 18
+                }],
+                flag: true
+            },
+            methods: {
+                handleClick(content) {
+                    console.log("我点了")
+                    console.log(content)
+                },
+                changes(e) {
+                    console.log(e);
+                    this.flag = e;
+                    console.log(this.flag)
+                }
+            },
+            f() {
+                console.log('我聚焦了')
+            },
+            b() {
+                console.log('我失焦了')
+            }
+        })
+    </script>
+</body>
+</html>
