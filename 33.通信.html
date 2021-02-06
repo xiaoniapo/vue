@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Document</title>
     <script src="./vue.js"></script>
 </head>
+
 <body>
     <div id="app">
         <!-- <my-cmp
@@ -32,12 +34,7 @@
         ></base-checkbox> -->
         <!-- <base-input :value="val" @update:value='val = $event'></base-input> -->
         <!-- <base-input :value.sync="val"></base-input> -->
-        <base-test
-            type="text"
-            class="active"
-            @focus="f"
-            @blur="b"
-        ></base-test>
+        <!-- <base-test type="text" class="active" @focus="f" @blur="b"></base-test> -->
     </div>
     <script>
         Vue.component("base-test", {
@@ -92,7 +89,6 @@
             </div>
             `
         });
-
         Vue.component("cmp-item", {
             props: ["name", "age"],
             template: `
@@ -123,15 +119,17 @@
                     console.log(e);
                     this.flag = e;
                     console.log(this.flag)
+                },
+                f() {
+                    console.log('我聚焦了')
+                },
+                b() {
+                    console.log('我失焦了')
                 }
             },
-            f() {
-                console.log('我聚焦了')
-            },
-            b() {
-                console.log('我失焦了')
-            }
+
         })
     </script>
 </body>
+
 </html>
