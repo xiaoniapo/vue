@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <cmp-a></cmp-a>
+        <cmp-b></cmp-b>
+    </div>
+    <script>
+        Vue.mixin({
+            mounted() {
+                const myOptions = this.$options.myOptions;
+                //当含有自定义的选项myOptions的时候就会执行当前函数
+                if(myOptions) {
+                    console.log(this.$options.components)
+                    console.log("我是全局挂载后的函数")
+                }
+            }
+        })
+        const minxin = {
+            data() {
+                return {
+                    name: "我是混入对象的",
+                    grade: 100
+                }
+            },
+            created() {
+                console.log("我是混入对象中的声明周期函数")
+                console.log(this.$options.created)
+            }
+        };
+        Vue.component("cmp-a", {
+            mixins: [ minxin ],
+            data() {
+                return {
+                    name: "我是组件内的",
+                    age: 19
+                }
+            },
+            template: `
+                <div>cmp-a</div>
+            `,
+            created() {
+                console.log("我是组件的声明周期函数")
+            }
+        });
+        Vue.component("cmp-b", {
+            myOptions: "123",
+            template: `
+                <div>cmp-b</div>
+            `
+        })
+        const vm = new Vue({
+            el: "#app",
+            // mixins: [ minxin ]
+        })
+    </script>
+</body>
+</html>
