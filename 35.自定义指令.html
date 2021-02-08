@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,15 +8,20 @@
     <title>Document</title>
     <script src="./vue.js"></script>
 </head>
+
 <body>
     <div id="app">
         <!-- <input type="text" v-focus:foo.x.y="val"> -->
         <!-- <input type="text" v-myshow="flag"> -->
-        <input type="text" v-mymodel="content">
+        <!-- <input type="text" v-mymodel="content"> -->
 
+        <input type="text" v-myslice:[num].Number="content">
+        {{ content }}
+
+
+        <div v-test="{color: 'red', marginLeft: '123'}"></div>
     </div>
     <script>
-        
         //文本框自动聚焦功能
         Vue.directive("focus", {
             bind(el) {
@@ -29,7 +35,7 @@
                 console.log(binding.arg);
                 console.log(binding.modifiers)
                 console.log(binding);
-                console.log(vnode)
+                console.log(vnode);
                 console.log("inserted")
             },
             update(el, binding) {
@@ -37,9 +43,9 @@
                 console.log("update")
             },
             componentUpdated(el, binding) {
-     
+
                 console.log(binding.oldValue)
-                
+
                 console.log("componentUpdate");
             },
             unbind() {
@@ -52,11 +58,15 @@
         //flag -> false -> 隐藏
         Vue.directive("myshow", {
             bind(el, binding) {
-                const { value } = binding;
+                const {
+                    value
+                } = binding;
                 el.style.display = value ? '' : 'none'
             },
-            update(el, binding) {//当指令后面的值改变的时候执行该函数
-                const { value } = binding;
+            update(el, binding) { //当指令后面的值改变的时候执行该函数
+                const {
+                    value
+                } = binding;
                 el.style.display = value ? '' : 'none';
             }
         });
@@ -64,21 +74,102 @@
         //1. 数据控制文本框的内容
         //2. 文本框数据的改变 -> 数据
         Vue.directive("mymodel", {
-            bind(el, binding) {//就是一开始讲所需要得数据绑定到对应得输入框上
-                const { value } = binding;
+            bind(el, binding) { //就是一开始讲所需要得数据绑定到对应得输入框上
+                const {
+                    value
+                } = binding;
                 el.value = value;
             },
             inserted(el, binding, vnode) {
-                const { expression } = binding;//表示当前绑定得数据
+                const {
+                    expression
+                } = binding; //表示当前绑定得数据
                 // console.log(expression)
-                el.oninput = function () {//修改父组件中得数据
+                el.oninput = function () { //修改父组件中得数据
                     // console.log(vnode.context)                    
                     vnode.context[expression] = this.value
                 }
             },
             update(el, binding) {
-                const { value } = binding;
+                const {
+                    value
+                } = binding;
                 el.value = value
+            }
+        });
+        //书写自定义指令  使得文本框中得只保留数字，且长度最大为子级传得参数个数
+        // Vue.directive("myslice", {
+        //     bind(el, binding, vnode) { //该处执行一次  故而当修改num得时候  此并不会修改arg
+        //         console.log("bind")
+        //         let {
+        //             expression,
+        //             value,
+        //             arg,
+        //             modifiers
+        //         } = binding;
+        //         if (modifiers.number) {
+        //             value = value.replace(/\D/g, "")
+        //         }
+        //         const values = value.slice(0, arg);
+        //         el.value = vnode.context[expression] = values;
+
+        //         el.oninput = function () {
+        //             let value = this.value;
+        //             if (modifiers.number) {
+        //                 value = value.replace(/\D/g, "");
+        //             }
+        //             value = value.slice(0, arg);
+        //             el.value = vnode.context[expression] = value;
+        //         }
+        //     },
+        //     update(el, binding, vnode) {
+        //         console.log("update")
+        //         let {
+        //             expression,
+        //             value,
+        //             arg,
+        //             modifiers
+        //         } = binding;
+        //         if (modifiers.number) {
+        //             value = value.replace(/\D/g, "")
+        //         }
+        //         const values = value.slice(0, arg);
+        //         el.value = vnode.context[expression] = values;
+        //         el.oninput = function () {
+        //             let value = this.value;
+        //             if (modifiers.number) {
+        //                 value = value.replace(/\D/g, "");
+        //             }
+        //             value = value.slice(0, arg);
+        //             el.value = vnode.context[expression] = value;
+        //         }
+        //     },
+        // });
+        Vue.directive("myslice", (el, binding, vnode) => {
+            let {
+                expression,
+                value,
+                arg,
+                modifiers
+            } = binding;
+            if (modifiers.number) {
+                value = value.replace(/\D/g, "")
+            }
+            const values = value.slice(0, arg);
+            el.value = vnode.context[expression] = values;
+            el.oninput = function () {
+                let value = this.value;
+                if (modifiers.number) {
+                    value = value.replace(/\D/g, "");
+                }
+                value = value.slice(0, arg);
+                el.value = vnode.context[expression] = value;
+            }
+        });
+        Vue.directive("test", {
+            inserted(el, binding) {
+                const { value } = binding;
+                console.log(value)
             }
         })
         const vm = new Vue({
@@ -87,10 +178,11 @@
                 val: 123,
                 age: "wang",
                 flag: true,
-                content: "123"
+                content: "12王6zzz789",
+                num: 5
             }
         })
-        
     </script>
 </body>
+
 </html>
