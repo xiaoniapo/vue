@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- {{ content | trans(123) | tran(456) }} -->
+        {{ content | capitalize }}
+        {{ num | add }}
+        {{ num | special }}
+    </div>
+    <script>
+        Vue.filter("trans", (value, item) => {
+            console.log(value, item);
+            return value.toUpperCase()
+        });
+        Vue.filter("tran", (value, item) => {
+            console.log(value, item);
+            return value.charAt(0)
+        });
+
+        //将首字母进行大写
+        Vue.filter("capitalize", value => {
+            if(!value) {
+                return;
+            }
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        });
+        //在数字之间加上逗号  每隔三位加上一个逗号
+        Vue.filter("add", value => {
+            if(!value) {
+                return;
+            }
+            return value.toLocaleString(2);
+        })
+        //将一个数字  超过10000 则转换成多少万  否则就是原数字
+        Vue.filter("special", value => {
+            if(!value) {
+                return;
+            }
+            if(value > 10000) {
+                return (value / 10000).toFixed(1) + "万";
+            }
+            return value
+        })
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                content: "wan",
+                num: 178945
+            }
+        })
+    </script>
+</body>
+</html>
