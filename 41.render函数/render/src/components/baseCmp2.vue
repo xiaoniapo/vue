@@ -56,7 +56,7 @@ export default {
                blur() {
                    console.log("nativeOn 我失焦了")
                }
-           }
+           },
         })])
     }
 }
